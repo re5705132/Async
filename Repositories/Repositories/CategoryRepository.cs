@@ -10,9 +10,16 @@ namespace Repositories.Repositories
 {
     public class CategoryRepository : IDataRepository<Category>
     {
-        public Task<Category> AddAsync(Category entity)
+        IContext _context;
+        public CategoryRepository(IContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public async Task<Category> AddAsync(Category entity)
+        {
+           var newCategory= _context.Categories.Add(entity);
+           await _context.SaveChangesAsync();
+          return newCategory.Entity;
         }
 
         public Task DeleteAsync(int id)
